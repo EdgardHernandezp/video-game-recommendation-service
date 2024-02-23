@@ -66,6 +66,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<testFramework>JUNIT5</testFramework>
+					<baseClassForTests>com.dreamseeker.videogamerecommendationservice.BaseTestClass</baseClassForTests>
 				</configuration>
 			</plugin>
 			<plugin>
