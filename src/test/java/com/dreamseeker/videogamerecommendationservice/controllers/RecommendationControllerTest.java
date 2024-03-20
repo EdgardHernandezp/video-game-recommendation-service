@@ -36,12 +36,24 @@ class RecommendationControllerTest {
         Videogame v1 = new Videogame("Red Dead Redemption", "Adventure");
         Videogame v2 = new Videogame("Crash", "Platformer");
         List<Videogame> videogames = List.of(v1, v2);
-        when(recommendationService.fetchRecommendations(any())).thenReturn(new RecommendationResponse(videogames));
+        when(recommendationService.fetchRecommendations(any(), any())).thenReturn(new RecommendationResponse(videogames));
 
         ObjectMapper objectMapper = new ObjectMapper();
         String serializedUserInfo = objectMapper.writeValueAsString(new UserInfo(UUID.randomUUID().toString(), List.of("Adventure", "Platformer")));
         mockMvc.perform(put("/fetch-recommendations").content(serializedUserInfo).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(".videogames.[*].name", containsInAnyOrder("Red Dead Redemption", "Crash")));
+    }
+
+    @Test
+    void fetchRecommendationsWithExclusions() throws Exception {
+        List<Videogame> videogames = List.of(new Videogame("Crash", "Platformer"));
+        when(recommendationService.fetchRecommendations(any(), any())).thenReturn(new RecommendationResponse(videogames));
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String serializedUserInfo = objectMapper.writeValueAsString(new UserInfo(UUID.randomUUID().toString(), List.of("Adventure", "Platformer")));
+        mockMvc.perform(put("/fetch-recommendations").param("exclusions", "Horror, Adventure").content(serializedUserInfo).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath(".videogames.[*].name", containsInAnyOrder("Crash")));
     }
 }
