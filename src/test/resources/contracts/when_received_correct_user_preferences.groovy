@@ -34,4 +34,5 @@ Contract.make {
                 ]
         )
     }
+    priority(2)
 }
