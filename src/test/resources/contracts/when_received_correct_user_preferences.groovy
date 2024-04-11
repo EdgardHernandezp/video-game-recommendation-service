@@ -11,7 +11,7 @@ Contract.make {
             header(contentType(), applicationJson())
         }
         body([
-                userId         : anyUuid(),
+                userId         : value(anyUuid(), producer('e9fbebcf-abb4-4097-831a-f3f2797149d8')),
                 preferredGenres: ['Platformer', 'Stealth', 'Adventure']
         ])
     }
